@@ -4,6 +4,8 @@ const app = express();
 const flips = require("./data/flips-data");
 const counts = require("./data/counts-data");
 
+app.use(express.json());
+
 app.use("/counts/:countId", (request, response, next) => {
   const { countId } = request.params;
   const foundCount = counts[countId];
@@ -30,8 +32,23 @@ app.use("/flips/:flipId", (request, response, next) => {
   }
 });
 
-app.use("/flips", (request, response) => {
+app.get("/flips", (request, response) => {
   response.json({ data: flips });
+});
+
+app.post("/flips", (request, response, next) => {
+  const { data: { result } = {} } = request.body;
+  if (result) {
+    const newFlip = {
+      id: flips.length + 1, // Assign the next ID
+      result,
+    };
+    flips.push(newFlip);
+    counts[result] = counts[result] + 1; // Increment the counts
+    response.status(201).json({ data: newFlip });
+  } else {
+    response.sendStatus(400);
+  }
 });
 
 // Not found handler
