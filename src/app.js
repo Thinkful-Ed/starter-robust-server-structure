@@ -6,29 +6,35 @@ const counts = require("./data/counts-data");
 
 app.use(express.json());
 
-app.use("/counts/:countId", (request, response, next) => {
+app.get("/counts/:countId", (request, response, next) => {
   const { countId } = request.params;
   const foundCount = counts[countId];
 
   if (foundCount === undefined) {
-    next(`Count id not found: ${countId}`);
+    next({
+      status: 404,
+      message: `Count id not found: ${countId}`,
+    });
   } else {
     response.json({ data: foundCount });
   }
 });
 
-app.use("/counts", (request, response) => {
+app.get("/counts", (request, response) => {
   response.json({ data: counts });
 });
 
-app.use("/flips/:flipId", (request, response, next) => {
+app.get("/flips/:flipId", (request, response, next) => {
   const { flipId } = request.params;
   const foundFlip = flips.find((flip) => flip.id === Number(flipId));
 
   if (foundFlip) {
     response.json({ data: foundFlip });
   } else {
-    next(`Flip id not found: ${flipId}`);
+    next({
+      status: 404,
+      message: `Flip id not found: ${flipId}`,
+    });
   }
 });
 
@@ -36,9 +42,21 @@ app.get("/flips", (request, response) => {
   response.json({ data: flips });
 });
 
+
+function bodyHasResultProperty(request, response, next) {
+  const { data: { result } = {} } = request.body;
+  if (result) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: "A 'result' property is required.",
+  });
+}
+
 let lastFlipId = flips.reduce((maxId, flip) => Math.max(maxId, flip.id), 0)
 
-app.post("/flips", (request, response, next) => {
+app.post("/flips", bodyHasResultProperty, (request, response, next) => {
   const { data: { result } = {} } = request.body;
   if (result) {
     const newFlip = {
@@ -55,13 +73,14 @@ app.post("/flips", (request, response, next) => {
 
 // Not found handler
 app.use((request, response, next) => {
-  next(`Not found: ${request.originalUrl}`);
+  next({ status: 404, message: `Not found: ${request.originalUrl}` });
 });
 
 // Error handler
 app.use((error, request, response, next) => {
   console.error(error);
-  response.send(error);
+  const { status = 500, message = "Something went wrong!" } = error;
+  response.status(status).json({ errors: [message] });
 });
 
 module.exports = app;
