@@ -1,7 +1,7 @@
 {
   "name": "robust-server-structure-starter",
   "version": "1.0.0",
-  "description": "Starter project for robust server structre",
+  "description": "Starter project for robust server structure",
   "private": true,
   "main": "src/server.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "dev": "nodemon src/server.js"
   },
   "keywords": [],
-  "author": "Thinful",
+  "author": "Thinkful",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^2.0.4"
