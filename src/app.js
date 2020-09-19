@@ -80,7 +80,7 @@ app.use((request, response, next) => {
 app.use((error, request, response, next) => {
   console.error(error);
   const { status = 500, message = "Something went wrong!" } = error;
-  response.status(status).json({ error: message });
+  response.status(status).json({ errors: [message] });
 });
 
 module.exports = app;
