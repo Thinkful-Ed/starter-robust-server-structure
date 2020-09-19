@@ -36,7 +36,7 @@ app.use("/flips", (request, response) => {
 
 // Not found handler
 app.use((request, response, next) => {
-  next({ status: 404, message: `Not found: ${request.originalUrl}` });
+  next(`Not found: ${request.originalUrl}`);
 });
 
 // Error handler
