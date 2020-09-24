@@ -16,7 +16,7 @@ app.use("/counts/:countId", (request, response, next) => {
 });
 
 app.use("/counts", (request, response) => {
-  response.json(counts);
+  response.json({ data: counts });
 });
 
 app.use("/flips/:flipId", (request, response, next) => {
@@ -24,14 +24,14 @@ app.use("/flips/:flipId", (request, response, next) => {
   const foundFlip = flips.find((flip) => flip.id === Number(flipId));
 
   if (foundFlip) {
-    response.json(foundFlip);
+    response.json({ data: foundFlip });
   } else {
     next(`Flip id not found: ${flipId}`);
   }
 });
 
 app.use("/flips", (request, response) => {
-  response.json(flips);
+  response.json({ data: flips });
 });
 
 // Not found handler
