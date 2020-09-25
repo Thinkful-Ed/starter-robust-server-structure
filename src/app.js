@@ -4,6 +4,8 @@ const app = express();
 const flipsRouter = require("./flips/flips.router");
 const counts = require("./data/counts-data");
 
+const flipsRouter = require("./flips/flips.router");
+
 app.use(express.json());
 
 app.get("/counts/:countId", (request, response, next) => {

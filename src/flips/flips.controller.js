@@ -27,16 +27,17 @@ function create(request, response, next) {
   response.status(201).json({ data: newFlip });
 }
 
-function destroy(request, response) {
+function destroy(request, response, next) {
   const { flipId } = request.params;
   const index = flips.findIndex((flip) => flip.id === Number(flipId));
-  // splice returns an array of the deleted elements, even if it is one element
-  const deletedFlips = flips.splice(index, 1);
-  deletedFlips.forEach(
-    (deletedFlip) =>
-      (counts[deletedFlip.result] = counts[deletedFlip.result] - 1)
-  );
-
+  if (index > -1) {
+    // splice returns an array of the deleted elements, even if it is one element
+    const deletedFlips = flips.splice(index, 1);
+    deletedFlips.forEach(
+      (deletedFlip) =>
+        (counts[deletedFlip.result] = counts[deletedFlip.result] - 1)
+    );
+  }
   response.sendStatus(204);
 }
 
