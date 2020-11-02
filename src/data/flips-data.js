@@ -1,5 +1,5 @@
 module.exports = [
-  { id: 1, result: "Heads" },
-  { id: 2, result: "Heads" },
-  { id: 3, result: "Tails" },
+  { id: 1, result: "heads" },
+  { id: 2, result: "heads" },
+  { id: 3, result: "tails" },
 ];

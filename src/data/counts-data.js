@@ -1,5 +1,5 @@
 module.exports = {
-  Heads: 2,
-  Tails: 1,
-  Edge: 0,
+  heads: 2,
+  tails: 1,
+  edge: 0,
 };
