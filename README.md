@@ -1,22 +1,20 @@
 # Starter Code: Robust server structure
 
-This server is intended to be run for some checkpoints in the Thinkful curriculum. If you have trouble getting the server to run, reach out to your mentor.
+This server is intended to be run for some checkpoints in the Thinkful curriculum. If you have trouble getting the server to run, reach out for assistance.
 
-## Installation Instructions
+## Installation
 
 1. Clone this repository.
 1. `cd` into the newly created directory.
 1. Run `npm install`.
-1. Run `npm start`.
+1. Run `npm run dev`. This command will spin up a server on port 5000 that will automatically restart when changes are made to source files.
 
-Running `npm start` will spin up a server on port 5000.
-
-Running `npm run dev` will spin up a server on port 5000 that will automatically restart when changes are made to source files.
+When you navigate to `localhost:5000` initially, you should see a `Not found: /` message in the browser because none of the routes have been implemented yet.
 
 ## Description
 
-This project is the minimum setup required to have an Express API. However, only the not found and error handler is implemented at this point.
+This project contains the minimum setup code required to run an Express API. However, only the not found and error handlers are implemented at this point.
 
-Follow the instructions in the checkpoins for implementing the API.
+Follow the instructions in the checkpoint for implementing the API.
 
-If you have trouble, reach out to your mentor.
+If you have trouble, reach out for assistance.
