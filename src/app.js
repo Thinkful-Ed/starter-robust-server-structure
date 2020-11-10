@@ -6,8 +6,8 @@ const counts = require("./data/counts-data");
 
 app.use(express.json());
 
-app.get("/counts/:countId", (request, response, next) => {
-  const { countId } = request.params;
+app.get("/counts/:countId", (req, res, next) => {
+  const { countId } = req.params;
   const foundCount = counts[countId];
 
   if (foundCount === undefined) {
@@ -16,20 +16,20 @@ app.get("/counts/:countId", (request, response, next) => {
       message: `Count id not found: ${countId}`,
     });
   } else {
-    response.json({ data: foundCount });
+    res.json({ data: foundCount });
   }
 });
 
-app.get("/counts", (request, response) => {
-  response.json({ data: counts });
+app.get("/counts", (req, res) => {
+  res.json({ data: counts });
 });
 
-app.get("/flips/:flipId", (request, response, next) => {
-  const { flipId } = request.params;
-  const foundFlip = flips.find((flip) => flip.id === Number(flipId));
+app.get("/flips/:flipId", (req, res, next) => {
+  const { flipId } = req.params;
+  const foundFlip = flips.find(flip => flip.id === Number(flipId));
 
   if (foundFlip) {
-    response.json({ data: foundFlip });
+    res.json({ data: foundFlip });
   } else {
     next({
       status: 404,
@@ -38,13 +38,12 @@ app.get("/flips/:flipId", (request, response, next) => {
   }
 });
 
-app.get("/flips", (request, response) => {
-  response.json({ data: flips });
+app.get("/flips", (req, res) => {
+  res.json({ data: flips });
 });
 
-
-function bodyHasResultProperty(request, response, next) {
-  const { data: { result } = {} } = request.body;
+const bodyHasResultProperty = (req, res, next) => {
+  const { data: { result } = {} } = req.body;
   if (result) {
     return next();
   }
@@ -52,29 +51,29 @@ function bodyHasResultProperty(request, response, next) {
     status: 400,
     message: "A 'result' property is required.",
   });
-}
+};
 
-app.post("/flips", bodyHasResultProperty, (request, response, next) => {
-  const { data: { result } = {} } = request.body;
+app.post("/flips", bodyHasResultProperty, (req, res, next) => {
+  const { data: { result } = {} } = req.body;
   const newFlip = {
     id: flips.length + 1, // Assign the next ID
     result,
   };
   flips.push(newFlip);
   counts[result] = counts[result] + 1; // Increment the counts
-  response.status(201).json({ data: newFlip });
+  res.status(201).json({ data: newFlip });
 });
 
 // Not found handler
-app.use((request, response, next) => {
-  next({ status: 404, message: `Not found: ${request.originalUrl}` });
+app.use((req, res, next) => {
+  next({ status: 404, message: `Not found: ${req.originalUrl}` });
 });
 
 // Error handler
-app.use((error, request, response, next) => {
+app.use((error, req, res, next) => {
   console.error(error);
   const { status = 500, message = "Something went wrong!" } = error;
-  response.status(status).json({ errors: [message] });
+  res.status(status).json({ errors: [message] });
 });
 
 module.exports = app;
