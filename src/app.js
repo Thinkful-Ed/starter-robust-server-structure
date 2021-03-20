@@ -36,11 +36,13 @@ app.get("/flips", (request, response) => {
   response.json({ data: flips });
 });
 
+let lastFlipId = flips.reduce((maxId, flip) => Math.max(maxId, flip.id), 0)
+
 app.post("/flips", (request, response, next) => {
   const { data: { result } = {} } = request.body;
   if (result) {
     const newFlip = {
-      id: flips.length + 1, // Assign the next ID
+      id: ++lastFlipId, // Increment last id then assign as the current ID
       result,
     };
     flips.push(newFlip);
