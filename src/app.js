@@ -3,8 +3,24 @@ const app = express();
 
 //Obtain the flip-records from the data directory
 const flips = require("./data/flips-data");
+const counts = require("./data/counts-data");
 
-/********************** ROUTES **********************/
+/******************************** ROUTES ********************************/
+
+/************** /coins/ paths **************/
+app.use("/counts/:countId", (req, res, next) => {
+  const { countId } = req.params;
+  const foundCount = counts[countId];
+  return foundCount === undefined
+    ? next(`Count id "${countId}" not found!`)
+    : res.json({ data: foundCount });
+});
+
+app.use("/counts", (req, res) => {
+  res.json({ data: counts });
+});
+
+/************** /flips/ paths **************/
 // "/flips/:flipId" Route
 app.use("/flips/:flipId", (req, res, next) => {
   const { flipId } = req.params;
