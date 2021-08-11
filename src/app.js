@@ -1,9 +1,24 @@
 const express = require("express");
 const app = express();
 
-// TODO: Follow instructions in the checkpoint to implement ths API.
+//Obtain the flip-records from the data directory
+const flips = require("./data/flips-data");
 
-// Not found handler
+/********************** ROUTES **********************/
+// "/flips/:flipId" Route
+app.use("/flips/:flipId", (req, res, next) => {
+  const { flipId } = req.params;
+  const foundFlip = flips.find((flip) => flip.id === Number(flipId));
+
+  return foundFlip
+    ? res.json({ data: foundFlip })
+    : next(`Flip id "${flipId}" not found!`);
+});
+
+// "/flips" Route
+app.use("/flips", (req, res) => res.json({ data: flips }));
+
+// Default 404 Route
 app.use((request, response, next) => {
   next(`Not found: ${request.originalUrl}`);
 });
