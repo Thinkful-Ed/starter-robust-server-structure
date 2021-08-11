@@ -6,10 +6,11 @@ const flips = require("./data/flips-data");
 const counts = require("./data/counts-data");
 
 /******************************** ROUTES ********************************/
+app.use(express.json());
 
 /************** /coins/ paths **************/
 // "/counts/:countId" Route
-app.use("/counts/:countId", (req, res, next) => {
+app.get("/counts/:countId", (req, res, next) => {
   const { countId } = req.params;
   const foundCount = counts[countId];
   return foundCount === undefined
@@ -18,13 +19,14 @@ app.use("/counts/:countId", (req, res, next) => {
 });
 
 // "/counts" Route
-app.use("/counts", (req, res) => {
+app.get("/counts", (req, res) => {
   res.json({ data: counts });
 });
 
 /************** /flips/ paths **************/
+let lastFlipId = flips.reduce((maxId, flip) => Math.max(maxId, flip.id), 0);
 // "/flips/:flipId" Route
-app.use("/flips/:flipId", (req, res, next) => {
+app.get("/flips/:flipId", (req, res, next) => {
   const { flipId } = req.params;
   const foundFlip = flips.find((flip) => flip.id === Number(flipId));
 
@@ -34,7 +36,17 @@ app.use("/flips/:flipId", (req, res, next) => {
 });
 
 // "/flips" Route
-app.use("/flips", (req, res) => res.json({ data: flips }));
+app.get("/flips", (req, res) => res.json({ data: flips }));
+app.post("/flips", (req, res, next) => {
+  const { data: { result } = {} } = req.body;
+  const newFlip = {
+    id: ++lastFlipId, // Increment last ID, then assign as the current ID
+    result,
+  };
+  flips.push(newFlip);
+  counts[result] = counts[result] + 1; // Increment the counts
+  res.json({ data: newFlip });
+});
 
 // Default 404 Route
 app.use((request, response, next) => {
