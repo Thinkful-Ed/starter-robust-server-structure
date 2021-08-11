@@ -8,6 +8,7 @@ const counts = require("./data/counts-data");
 /******************************** ROUTES ********************************/
 
 /************** /coins/ paths **************/
+// "/counts/:countId" Route
 app.use("/counts/:countId", (req, res, next) => {
   const { countId } = req.params;
   const foundCount = counts[countId];
@@ -16,6 +17,7 @@ app.use("/counts/:countId", (req, res, next) => {
     : res.json({ data: foundCount });
 });
 
+// "/counts" Route
 app.use("/counts", (req, res) => {
   res.json({ data: counts });
 });
